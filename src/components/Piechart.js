@@ -1,12 +1,6 @@
 import React from "react";
 import styles from "./Piechart.module.css";
-import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
-
-const data = [
-  { name: "Entertainment", value: 70 },
-  { name: "Food", value: 30 },
-  { name: "Travel", value: 10 },
-];
+import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from "recharts";
 
 const COLORS = ["#FF9304", "#A000FF", "#FDE006"];
 
@@ -37,18 +31,41 @@ const renderCustomizedLabel = ({
   );
 };
 
-export default function Piechart() {
+export default function Piechart({ expensesArr }) {
+  const entertainmentValue = expensesArr
+    .filter((item) => item.category === "entertainment")
+    .reduce(
+      (accumulator, currItem) => accumulator + parseFloat(currItem.price),
+      0
+    );
+  const foodValue = expensesArr
+    .filter((item) => item.category === "food")
+    .reduce(
+      (accumulator, currItem) => accumulator + parseFloat(currItem.price),
+      0
+    );
+  const travelValue = expensesArr
+    .filter((item) => item.category === "travel")
+    .reduce(
+      (accumulator, currItem) => accumulator + parseFloat(currItem.price),
+      0
+    );
+  const data = [
+    { name: "Entertainment", value: (entertainmentValue || 0) },
+    { name: "Food", value: (foodValue || 0) },
+    { name: "Travel", value: (travelValue || 0) },
+  ];
   return (
     <div className={styles.wrapper}>
       <ResponsiveContainer width="100%" height="100%">
-        <PieChart width={400} height={400}>
+        <PieChart>
           <Pie
             data={data}
             cx="50%"
             cy="50%"
             labelLine={false}
             label={renderCustomizedLabel}
-            outerRadius={80}
+            outerRadius={70}
             fill="#8884d8"
             dataKey="value"
           >
@@ -59,6 +76,7 @@ export default function Piechart() {
               />
             ))}
           </Pie>
+          <Legend />
         </PieChart>
       </ResponsiveContainer>
     </div>

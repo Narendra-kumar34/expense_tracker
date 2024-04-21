@@ -1,0 +1,73 @@
+.addButton {
+    width: 167.65px;
+    height: 38px;
+    border-radius: 0.75rem;
+    background-image: linear-gradient(to right, #FF9595, #FF4747, #FF3838);
+    border: none;
+    color: white;
+    padding: 1px;
+    cursor: pointer;
+}
+
+.addExpenseButton {
+    border-radius: 0.75rem;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    padding: 0.5rem;
+    color: white;
+    background-color: #F4BB4A;
+    border: none;
+    width: 13.1rem;
+}
+
+.cancelButton {
+    border-radius: 0.75rem;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    padding: 0.5rem;
+    border: none;
+}
+
+.formWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.inputField {
+    border-radius: 0.75rem;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    padding: 0.5rem;
+    border: none;
+}
+
+.inputsWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.selectField {
+    border-radius: 0.75rem;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    padding: 0.5rem;
+    border: none;
+    width: 13.1rem;
+}
+
+.buttonsWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}

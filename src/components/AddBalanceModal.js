@@ -4,6 +4,8 @@ import { useState } from "react";
 import Modal from "react-modal";
 import { useSnackbar } from "notistack";
 
+Modal.setAppElement("#root");
+
 const customStyles = {
   content: {
     top: "50%",
@@ -30,7 +32,8 @@ export default function AddBalanceModal({ balance, setBalance }) {
     setIsOpen(false);
   }
 
-  const handleAddBalance = () => {
+  const handleAddBalance = (e) => {
+    e.preventDefault();
     if (isNaN(incomeAmount) || incomeAmount <= 0) {
         enqueueSnackbar("Income should be a positive number.", { variant: "warning" });
       } else {
@@ -55,7 +58,7 @@ export default function AddBalanceModal({ balance, setBalance }) {
         contentLabel="Example Modal"
       >
         <h1 style={{ color: "#000000", marginBottom: "1rem" }}>Add Balance</h1>
-        <form className={styles.formWrapper}>
+        <form className={styles.formWrapper} onSubmit={(e) => handleAddBalance(e)}>
           <input
             type="number"
             placeholder="Income Amount"
@@ -63,7 +66,7 @@ export default function AddBalanceModal({ balance, setBalance }) {
             onChange={(e) => setIncomeAmount(e.target.value)}
             value={incomeAmount}
           />
-          <button className={styles.addBalanceButton} onClick={() => handleAddBalance()}>Add Balance</button>
+          <input type="submit" value="Add Balance" className={styles.addBalanceButton} />
           <button onClick={closeModal} className={styles.cancelButton}>Cancel</button>
         </form>
       </Modal>
