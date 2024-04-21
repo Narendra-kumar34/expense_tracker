@@ -1,0 +1,47 @@
+.addButton {
+    width: 167.65px;
+    height: 38px;
+    border-radius: 0.75rem;
+    background-image: linear-gradient(to right, #B5DC52, #89E148);
+    border: none;
+    color: white;
+    padding: 1px;
+    cursor: pointer;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.formWrapper {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.incomeAmount {
+    border-radius: 0.75rem;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    padding: 0.5rem;
+    border: none;
+}
+
+.addBalanceButton {
+    border-radius: 0.75rem;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    padding: 0.5rem;
+    color: white;
+    background-color: #F4BB4A;
+    border: none;
+}
+
+.cancelButton {
+    border-radius: 0.75rem;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    padding: 0.5rem;
+    border: none;
+}
