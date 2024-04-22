@@ -71,3 +71,8 @@ input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+
+.editButton {
+    border: none;
+    background-color: white;
+}

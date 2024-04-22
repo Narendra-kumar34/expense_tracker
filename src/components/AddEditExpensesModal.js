@@ -3,6 +3,7 @@ import styles from "./AddEditExpensesModal.module.css";
 import { useState } from "react";
 import { useSnackbar } from "notistack";
 import Modal from "react-modal";
+import EditPic from "../assets/EditImg.png";
 
 Modal.setAppElement("#root");
 
@@ -24,14 +25,26 @@ export default function AddEditExpensesModal({
   expenses,
   setExpenses,
   setWalletBalance,
-  setExpensesArr
+  expensesArr,
+  setExpensesArr,
+  editId = 0,
 }) {
+  let editObj;
+  if (type === "edit") {
+    editObj = JSON.parse(localStorage.getItem("expenses")).find(
+      (expense) => expense.id === editId
+    );
+  } else {
+    editObj = {};
+  }
   const [modalIsOpen, setIsOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
-  const [title, setTitle] = useState("");
-  const [price, setPrice] = useState(0);
-  const [category, setCategory] = useState("");
-  const [date, setDate] = useState("");
+  const [title, setTitle] = useState(editId === 0 ? "" : editObj.title);
+  const [price, setPrice] = useState(editId === 0 ? 0 : editObj.price);
+  const [category, setCategory] = useState(
+    editId === 0 ? "" : editObj?.category || ""
+  );
+  const [date, setDate] = useState(editId === 0 ? "" : editObj?.date || "");
 
   function openModal() {
     setIsOpen(true);
@@ -44,12 +57,20 @@ export default function AddEditExpensesModal({
   const handleAddExpense = (e) => {
     e.preventDefault();
     const currBalance = parseInt(localStorage.getItem("balance"));
+    let diffPrice;
+    if (editId !== 0) {
+      diffPrice = parseInt(price) - parseInt(editObj?.price || 0);
+    }
     if (price <= 0) {
       enqueueSnackbar("Price should be a greater than 0.", {
         variant: "warning",
       });
-    } else if (price > currBalance) {
+    } else if (price > currBalance && editId === 0) {
       enqueueSnackbar("Can't spend more than wallet balance.", {
+        variant: "warning",
+      });
+    } else if (editId !== 0 && diffPrice > currBalance) {
+      enqueueSnackbar("Can't spend more than available wallet balance", {
         variant: "warning",
       });
     } else if (category === "") {
@@ -60,6 +81,7 @@ export default function AddEditExpensesModal({
       enqueueSnackbar("Future date can't be selected.", { variant: "warning" });
     } else {
       const data = {
+        id: Date.now().toString(36) + Math.random().toString(36).substr(2),
         title: title,
         price: price,
         category: category,
@@ -67,34 +89,59 @@ export default function AddEditExpensesModal({
       };
       const existingExpenses =
         JSON.parse(localStorage.getItem("expenses")) || [];
-      existingExpenses.push(data);
+      let totExpenses;
+      let remainingBalance;
+      if (editId === 0) {
+        existingExpenses.push(data);
+        totExpenses = parseFloat(expenses) + parseFloat(price);
+        remainingBalance = parseInt(currBalance) - parseInt(price);
+        setTitle("");
+        setPrice(0);
+        setCategory("");
+        setDate("");
+      } else {
+        existingExpenses.forEach((expense) => {
+          if (expense.id === editId) {
+            expense.id = editId;
+            expense.title = title;
+            expense.price = price;
+            expense.category = category;
+            expense.date = date;
+          }
+        });
+        totExpenses = parseFloat(expenses) + parseFloat(diffPrice);
+        remainingBalance = parseInt(currBalance) - parseInt(diffPrice);
+      }
       localStorage.setItem("expenses", JSON.stringify(existingExpenses));
       setExpensesArr(existingExpenses);
-      const totExpenses = parseFloat(expenses) + parseFloat(price);
       setExpenses(totExpenses);
-      const remainingBalance = parseInt(currBalance) - parseInt(price);
       localStorage.setItem("balance", `${remainingBalance}`);
       setWalletBalance(remainingBalance);
-      setTitle("");
-      setPrice(0);
-      setCategory("");
-      setDate("");
       closeModal();
     }
   };
 
   return (
     <div>
-      <button className={styles.addButton} onClick={openModal}>
-        + Add Expense
-      </button>
+      {type === "add" && (
+        <button className={styles.addButton} onClick={openModal}>
+          + Add Expense
+        </button>
+      )}
+      {type === "edit" && (
+        <button className={styles.editButton} onClick={openModal}>
+          <img src={EditPic} alt="Edit" />
+        </button>
+      )}
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         style={customStyles}
         contentLabel="Example Modal"
       >
-        <h1 style={{ color: "#000000", marginBottom: "1rem" }}>Add Expenses</h1>
+        <h1 style={{ color: "#000000", marginBottom: "1rem" }}>
+          {type === "add" ? "Add" : "Edit"} Expense
+        </h1>
         <form
           className={styles.formWrapper}
           onSubmit={(e) => handleAddExpense(e)}
@@ -140,7 +187,7 @@ export default function AddEditExpensesModal({
           <div className={styles.buttonsWrapper}>
             <input
               className={styles.addExpenseButton}
-              value="Add Expense"
+              value={`${type === "add" ? "Add" : "Edit"} Expense`}
               type="submit"
             />
             <button onClick={closeModal} className={styles.cancelButton}>
